@@ -2,10 +2,12 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mon Fanpage | Cộng Đồng Đam Mê</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
             --primary-blue: #1000b5; 
@@ -14,89 +16,163 @@
             --glass-bg: rgba(255, 255, 255, 0.05);
             --facebook-color: #1877F2;
             --tiktok-color: #ff0050;
-            --group-color: #22c55e; /* Màu xanh lá cho tính năng cộng đồng */
+            --group-color: #22c55e;
         }
 
-        html { scroll-behavior: smooth; }
+        /* Tối ưu hóa hiển thị và xóa thanh trượt ngang */
+        html, body { 
+            scroll-behavior: smooth; 
+            overflow-x: hidden; 
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             background-color: var(--dark-bg);
             color: #ffffff;
             font-family: 'Be Vietnam Pro', sans-serif;
-            margin: 0;
-            overflow-x: hidden;
         }
 
-        /* Nav bar */
+        /* --- THANH ĐIỀU HƯỚNG (NAVIGATION) --- */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 8%;
-            background: rgba(10, 10, 18, 0.8);
-            backdrop-filter: blur(15px);
+            padding: 12px 8%;
+            background: rgba(10, 10, 18, 0.95);
+            backdrop-filter: blur(20px);
             position: fixed;
             width: 100%;
+            top: 0;
             left: 0;
             z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             box-sizing: border-box;
+            transition: all 0.4s ease;
         }
 
-        .logo-text { font-weight: 700; font-size: 24px; letter-spacing: -1px; cursor: pointer; }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .logo-img {
+            height: 48px; /* Tăng kích thước logo để tinh tế hơn */
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-text { 
+            font-weight: 700; 
+            font-size: 22px; 
+            letter-spacing: -1px;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
 
         .nav-links a {
             color: #ccc;
             text-decoration: none;
-            margin-left: 30px;
             font-size: 14px;
+            font-weight: 500;
             transition: 0.3s;
+            white-space: nowrap;
         }
 
         .nav-links a:hover { color: #00e0b0; }
 
-        /* Hero section */
+        .btn-join-nav {
+            border: 1px solid #00e0b0; 
+            padding: 8px 20px !important; 
+            border-radius: 50px;
+            color: #00e0b0 !important;
+            transition: 0.4s !important;
+        }
+
+        .btn-join-nav:hover {
+            background: rgba(0, 224, 176, 0.1);
+            box-shadow: 0 0 15px rgba(0, 224, 176, 0.2);
+        }
+
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* --- HERO SECTION --- */
         .hero {
-            height: 70vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: radial-gradient(circle at 70% 30%, rgba(16, 0, 181, 0.2), transparent);
+            padding: 80px 5% 0;
+            background: radial-gradient(circle at 50% 30%, rgba(16, 0, 181, 0.15), transparent);
+            box-sizing: border-box;
         }
 
         .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 10px;
+            font-size: clamp(2.2rem, 8vw, 4.5rem);
+            margin-bottom: 20px;
             background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
+            line-height: 1.2;
         }
 
         .hero p {
-            font-size: 1.1rem;
-            color: #aaa;
-            max-width: 600px;
-            margin-bottom: 30px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: #94a3b8;
+            max-width: 700px;
+            margin-bottom: 40px;
         }
 
-        /* Features Grid */
+        .btn-main {
+            padding: 18px 50px;
+            border-radius: 100px;
+            background: var(--gradient);
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(0, 224, 176, 0.3);
+            transition: 0.4s;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(0, 224, 176, 0.5);
+        }
+
+        /* --- FEATURES GRID --- */
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            padding: 20px 8% 80px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 60px 8% 100px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .feature-card {
             background: var(--glass-bg);
-            padding: 30px;
-            border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             transition: 0.4s ease;
-            cursor: pointer;
             text-decoration: none;
             color: inherit;
             display: flex;
@@ -104,98 +180,168 @@
         }
 
         .feature-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-8px);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .feature-card h3 {
-            margin-top: 0;
-            font-size: 1.25rem;
-            margin-bottom: 15px;
+            margin: 0 0 15px 0;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
 
-        /* Màu sắc tiêu đề từng ô */
         .content-card h3 { color: #9b59f6; }
         .group-card h3 { color: var(--group-color); }
         .fb-card h3 { color: var(--facebook-color); }
         .tiktok-card h3 { color: var(--tiktok-color); }
 
-        /* Hiệu ứng Hover đặc trưng */
-        .group-card:hover { border-color: var(--group-color); box-shadow: 0 5px 20px rgba(34, 197, 94, 0.1); }
-        .fb-card:hover { border-color: var(--facebook-color); box-shadow: 0 5px 20px rgba(24, 119, 242, 0.1); }
-        .tiktok-card:hover { border-color: var(--tiktok-color); box-shadow: 0 5px 20px rgba(255, 0, 80, 0.1); }
+        .feature-card p { font-size: 1rem; color: #94a3b8; line-height: 1.6; margin: 0; }
 
-        .card-desc { font-size: 0.95rem; color: #94a3b8; }
+        /* --- MOBILE RESPONSIVE (Sửa lỗi Menu) --- */
+        @media (max-width: 992px) {
+            nav { padding: 15px 5%; }
+            .menu-icon { display: block; }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: #0d0d16;
+                flex-direction: column;
+                justify-content: center;
+                gap: 20px;
+                transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            }
+
+            .nav-links.active { right: 0; }
+
+            .nav-links a {
+                font-size: 20px;
+                width: 100%;
+                text-align: center;
+                padding: 15px 0;
+            }
+
+            .btn-join-nav {
+                border: none;
+                background: var(--gradient);
+                color: white !important;
+                width: 80% !important;
+                border-radius: 12px;
+            }
+        }
 
         footer {
             text-align: center;
-            padding: 40px;
-            font-size: 0.8rem;
+            padding: 60px 20px;
             color: #475569;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo-text" onclick="window.scrollTo(0,0)">Mon <span style="color:#00e0b0">fanpage</span></div>
-        <div class="nav-links">
+        <div class="logo-container" onclick="window.scrollTo(0,0)">
+            <img src="logo.png" alt="" class="logo-img">
+            <div class="logo-text">Mon <span style="color:#00e0b0">fanpage</span></div>
+        </div>
+
+        <div class="menu-icon" id="menuToggle">
+            <i class="fas fa-bars-staggered"></i>
+        </div>
+
+        <div class="nav-links" id="navMenu">
             <a href="#home">Trang chủ</a>
             <a href="#kham-pha">Khám phá</a>
-            <a href="https://www.facebook.com/profile.php?id=61584319648700" target="_blank">Facebook</a>
-            <a href="https://www.facebook.com/share/g/1GjvjoHiFj/" target="_blank" style="border: 1px solid #00e0b0; padding: 8px 20px; border-radius: 20px;">Vào Nhóm</a>
+            <a href="https://www.facebook.com/profile.php?id=61584319648700" target="_blank">Fanpage</a>
+            <a href="https://www.tiktok.com/@mon_fanpage" target="_blank">TikTok</a>
+            <a href="https://www.facebook.com/share/g/1GjvjoHiFj/" target="_blank" class="btn-join-nav">Gia nhập nhóm</a>
         </div>
     </nav>
 
     <section class="hero" id="home">
-        <h1>Mon Fanpage Ecosystem.</h1>
-        <p>Kết nối mọi lúc, mọi nơi trên đa nền tảng. Tham gia cùng cộng đồng hơn hàng ngàn thành viên ngay hôm nay!</p>
-        <a href="#kham-pha" class="btn-cta" style="padding: 15px 40px; border-radius: 50px; background: var(--gradient); color: white; text-decoration: none; font-weight: 600;">Khám phá hệ sinh thái</a>
+        <h1>Hệ sinh thái cộng đồng Mon Fanpage.</h1>
+        <p>Không gian kết nối đam mê, sáng tạo nội dung và cập nhật những xu hướng mới nhất. Đồng hành cùng chúng mình trên mọi nền tảng!</p>
+        <a href="#kham-pha" class="btn-main">Khám phá ngay</a>
     </section>
 
     <section class="features" id="kham-pha">
         <div class="feature-card content-card">
-            <h3>Nội dung <i class="fas fa-bolt"></i></h3>
-            <p class="card-desc">Cập nhật những xu hướng và nội dung sáng tạo mới nhất từ đội ngũ Mon Fanpage.</p>
+            <h3>Nội dung <i class="fas fa-wand-magic-sparkles"></i></h3>
+            <p>Trải nghiệm những nội dung số sáng tạo, hình ảnh và video độc quyền được thiết kế bởi Mon Team.</p>
         </div>
 
         <a href="https://www.facebook.com/share/g/1GjvjoHiFj/" target="_blank" class="feature-card group-card">
             <h3>Kết nối Nhóm <i class="fas fa-comments"></i></h3>
-            <p class="card-desc">Gia nhập nhóm cộng đồng trên Facebook để thảo luận, chia sẻ và tương tác trực tiếp.</p>
+            <p>Cộng đồng thảo luận sôi nổi. Nơi bạn có thể chia sẻ ý kiến và làm quen với những người bạn cùng sở thích.</p>
         </a>
 
         <a href="https://www.facebook.com/profile.php?id=61584319648700" target="_blank" class="feature-card fb-card">
-            <h3>Trang Chủ <i class="fab fa-facebook"></i></h3>
-            <p class="card-desc">Theo dõi thông tin chính thức, sự kiện và các thông báo mới nhất từ Fanpage.</p>
+            <h3>Fanpage chính <i class="fab fa-facebook"></i></h3>
+            <p>Kênh tin tức chính thống. Cập nhật lịch trình sự kiện, thông báo quan trọng và các buổi Livestream đặc biệt.</p>
         </a>
 
         <a href="https://www.tiktok.com/@mon_fanpage" target="_blank" class="feature-card tiktok-card">
             <h3>TikTok <i class="fab fa-tiktok"></i></h3>
-            <p class="card-desc">Khám phá những khoảnh khắc giải trí thú vị và bắt trend nhanh nhất cùng Mon.</p>
+            <p>Kho video ngắn giải trí, bắt trend cực nhanh và những khoảnh khắc hậu trường thú vị nhất.</p>
         </a>
     </section>
 
     <footer>
-        &copy; 2024 Mon Fanpage Community
+        &copy; 2024 Mon Fanpage Community. Cảm ơn bạn đã đồng hành cùng chúng mình.
     </footer>
 
     <script>
-        window.addEventListener('scroll', function() {
+        // Xử lý đóng/mở Menu trên di động (kiểu Slide-in hiện đại)
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navMenu.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars-staggered');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        // Đóng menu khi nhấn ra ngoài hoặc nhấn vào link
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+                menuToggle.querySelector('i').classList.add('fa-bars-staggered');
+                menuToggle.querySelector('i').classList.remove('fa-xmark');
+            }
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.querySelector('i').classList.add('fa-bars-staggered');
+                menuToggle.querySelector('i').classList.remove('fa-xmark');
+            });
+        });
+
+        // Hiệu ứng Nav bar khi cuộn
+        window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.style.background = 'rgba(10, 10, 18, 0.95)';
-                nav.style.padding = '15px 8%';
+            if (window.scrollY > 30) {
+                nav.style.padding = '8px 8%';
+                nav.style.background = 'rgba(10, 10, 18, 0.98)';
+                nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
             } else {
-                nav.style.background = 'rgba(10, 10, 18, 0.8)';
-                nav.style.padding = '20px 8%';
+                nav.style.padding = '12px 8%';
+                nav.style.background = 'rgba(10, 10, 18, 0.95)';
+                nav.style.boxShadow = 'none';
             }
         });
     </script>
-
 </body>
 </html>
