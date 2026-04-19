@@ -3,247 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAGI ELITE | GIAO DIỆN ĐẶC QUYỀN</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,500&family=Montserrat:wght@100;300;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Mon Fanpage | Cộng Đồng Đam Mê</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg: #000000;
-            --text: #ffffff;
-            --accent: #e5e5e5;
-            --soft-white: rgba(255, 255, 255, 0.025);
-            --font-serif: 'Cormorant Garamond', serif;
-            --font-sans: 'Montserrat', sans-serif;
+            --primary-blue: #1000b5; 
+            --gradient: linear-gradient(90deg, #9b59f6, #4facfe, #00e0b0);
+            --dark-bg: #0a0a12;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --facebook-color: #1877F2;
+            --tiktok-color: #ff0050;
+            --group-color: #22c55e; /* Màu xanh lá cho tính năng cộng đồng */
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: var(--font-sans);
-            height: 100vh;
-            overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
         }
 
-        /* --- NỀN KHÔNG GIAN --- */
-        .ambient-canvas {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000 100%);
-            transition: transform 0.1s ease-out;
-        }
-
-        .glow {
-            position: absolute; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
-            border-radius: 50%; animation: drift 25s infinite alternate;
-        }
-
-        @keyframes drift {
-            from { transform: translate(-15%, -15%); }
-            to { transform: translate(15%, 15%); }
-        }
-
-        /* --- THANH ĐIỀU HƯỚNG TRÊN --- */
+        /* Nav bar */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 45px 60px;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(10, 10, 18, 0.8);
+            backdrop-filter: blur(15px);
+            position: fixed;
+            width: 100%;
+            left: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-sizing: border-box;
         }
 
-        .brand { 
-            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.5em; 
-            text-transform: uppercase; opacity: 0.6; 
+        .logo-text { font-weight: 700; font-size: 24px; letter-spacing: -1px; cursor: pointer; }
+
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 14px;
+            transition: 0.3s;
         }
 
-        /* --- MÀN HÌNH CHÀO --- */
-        #intro-gate {
-            position: fixed; inset: 0; z-index: 1000;
-            background: #000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            transition: 2.2s cubic-bezier(0.8, 0, 0.2, 1);
+        .nav-links a:hover { color: #00e0b0; }
+
+        /* Hero section */
+        .hero {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at 70% 30%, rgba(16, 0, 181, 0.2), transparent);
         }
 
-        .reveal-text {
-            font-family: var(--font-serif); font-style: italic;
-            font-size: 2.2rem; font-weight: 300; letter-spacing: 8px;
-            opacity: 0; transform: translateY(15px);
-            animation: fadeInOut 4.5s forwards;
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
         }
 
-        @keyframes fadeInOut {
-            25% { opacity: 1; transform: translateY(0); }
-            75% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-15px); }
+        .hero p {
+            font-size: 1.1rem;
+            color: #aaa;
+            max-width: 600px;
+            margin-bottom: 30px;
         }
 
-        /* --- GIAO DIỆN CHÍNH --- */
-        #dashboard {
-            opacity: 0; transform: scale(1.03);
-            transition: 2.8s cubic-bezier(0.1, 0.9, 0.2, 1);
-            text-align: center; max-width: 1300px; width: 100%;
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            padding: 20px 8% 80px;
         }
 
-        .hero-sub {
-            font-size: 0.55rem; letter-spacing: 1.2em; text-transform: uppercase;
-            opacity: 0.35; margin-bottom: 55px; font-weight: 300;
+        .feature-card {
+            background: var(--glass-bg);
+            padding: 30px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.4s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
         }
 
-        .hero-title {
-            font-family: var(--font-serif); font-size: 5.5rem;
-            font-weight: 300; font-style: italic; margin-bottom: 15px;
-            letter-spacing: -1px; line-height: 0.9;
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
-        /* --- KHỐI ĐIỀU HƯỚNG --- */
-        .card-grid {
-            display: flex; justify-content: center; gap: 30px; padding: 0 60px;
-            margin-top: 20px;
+        .feature-card h3 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .item-card {
-            flex: 1; height: 380px; background: var(--soft-white);
-            border: 1px solid rgba(255,255,255,0.04);
-            backdrop-filter: blur(60px); -webkit-backdrop-filter: blur(60px);
-            display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 45px; text-decoration: none; color: inherit;
-            transition: 0.7s cubic-bezier(0.15, 0.85, 0.35, 1);
-            position: relative; overflow: hidden;
-        }
+        /* Màu sắc tiêu đề từng ô */
+        .content-card h3 { color: #9b59f6; }
+        .group-card h3 { color: var(--group-color); }
+        .fb-card h3 { color: var(--facebook-color); }
+        .tiktok-card h3 { color: var(--tiktok-color); }
 
-        .item-card:hover {
-            background: rgba(255,255,255,0.07);
-            transform: translateY(-12px);
-            border-color: rgba(255,255,255,0.12);
-        }
+        /* Hiệu ứng Hover đặc trưng */
+        .group-card:hover { border-color: var(--group-color); box-shadow: 0 5px 20px rgba(34, 197, 94, 0.1); }
+        .fb-card:hover { border-color: var(--facebook-color); box-shadow: 0 5px 20px rgba(24, 119, 242, 0.1); }
+        .tiktok-card:hover { border-color: var(--tiktok-color); box-shadow: 0 5px 20px rgba(255, 0, 80, 0.1); }
 
-        /* Hiệu ứng tia sáng chạy ngang khi hover */
-        .item-card::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: 0.8s ease;
-        }
-        .item-card:hover::after { left: 100%; }
+        .card-desc { font-size: 0.95rem; color: #94a3b8; }
 
-        .card-num { 
-            position: absolute; top: 45px; left: 45px;
-            font-size: 0.65rem; font-weight: 300; opacity: 0.25; letter-spacing: 3px;
-        }
-
-        .card-label {
-            font-family: var(--font-serif); font-size: 1.7rem;
-            font-style: italic; margin-bottom: 8px; font-weight: 300;
-        }
-
-        .card-desc { 
-            font-size: 0.55rem; letter-spacing: 3px; opacity: 0.4; 
-            text-transform: uppercase; font-weight: 400;
-        }
-
-        /* --- CHÂN TRANG --- */
         footer {
-            position: fixed; bottom: 45px; width: 100%; padding: 0 60px;
-            display: flex; justify-content: space-between;
-            font-size: 0.5rem; letter-spacing: 5px; opacity: 0.25;
-            text-transform: uppercase;
-        }
-
-        /* ĐIỀU CHỈNH DI ĐỘNG */
-        @media (max-width: 900px) {
-            nav { padding: 30px; }
-            .card-grid { flex-direction: column; align-items: center; padding: 0 30px; }
-            .item-card { width: 100%; height: 200px; padding: 30px; }
-            .hero-title { font-size: 3.2rem; }
-            .hero-sub { letter-spacing: 0.5em; margin-bottom: 40px; }
-            footer { flex-direction: column; gap: 10px; align-items: center; bottom: 20px; }
+            text-align: center;
+            padding: 40px;
+            font-size: 0.8rem;
+            color: #475569;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
 <body>
 
-    <div class="ambient-canvas" id="canvas">
-        <div class="glow"></div>
-        <div class="glow" style="right: 0; bottom: 0; animation-delay: -7s; opacity: 0.2;"></div>
-    </div>
-
     <nav>
-        <div class="brand">SAGI ELITE • HỆ THỐNG V6</div>
-        <div class="brand" id="clock">00:00</div>
+        <div class="logo-text" onclick="window.scrollTo(0,0)">Mon <span style="color:#00e0b0">fanpage</span></div>
+        <div class="nav-links">
+            <a href="#home">Trang chủ</a>
+            <a href="#kham-pha">Khám phá</a>
+            <a href="https://www.facebook.com/profile.php?id=61584319648700" target="_blank">Facebook</a>
+            <a href="https://www.facebook.com/share/g/1GjvjoHiFj/" target="_blank" style="border: 1px solid #00e0b0; padding: 8px 20px; border-radius: 20px;">Vào Nhóm</a>
+        </div>
     </nav>
 
-    <div id="intro-gate">
-        <div class="reveal-text">Chào mừng trở lại.</div>
-    </div>
+    <section class="hero" id="home">
+        <h1>Mon Fanpage Ecosystem.</h1>
+        <p>Kết nối mọi lúc, mọi nơi trên đa nền tảng. Tham gia cùng cộng đồng hơn hàng ngàn thành viên ngay hôm nay!</p>
+        <a href="#kham-pha" class="btn-cta" style="padding: 15px 40px; border-radius: 50px; background: var(--gradient); color: white; text-decoration: none; font-weight: 600;">Khám phá hệ sinh thái</a>
+    </section>
 
-    <main id="dashboard">
-        <div class="hero-sub">Thư viện dữ liệu đặc quyền</div>
-        <h1 class="hero-title">Sagi Eleven</h1>
-        
-        <div class="card-grid">
-            <a href="https://drive.google.com/drive/folders/1G07LVX36gNEqi0KksYWz0lI1JG_eF7rN?usp=sharing" class="item-card">
-                <span class="card-num">KIẾN THỨC</span>
-                <h3 class="card-label">Kho Lưu Trữ</h3>
-                <p class="card-desc">Cơ sở dữ liệu Lớp 9 / Đám mây</p>
-            </a>
-
-            <a href="https://chiasefile9-source.github.io/27nov-file-web/" class="item-card">
-                <span class="card-num">HỆ THỐNG</span>
-                <h3 class="card-label">Tài Liệu Nội Bộ</h3>
-                <p class="card-desc">Cấu trúc nhân / Bảo mật cao</p>
-            </a>
-
-            <a href="#" class="item-card" onclick="alert('Tính năng đang được mã hóa...')">
-                <span class="card-num">KẾT NỐI</span>
-                <h3 class="card-label">Mạng Thần Kinh</h3>
-                <p class="card-desc">Cộng đồng Sagi / Trực tuyến</p>
-            </a>
+    <section class="features" id="kham-pha">
+        <div class="feature-card content-card">
+            <h3>Nội dung <i class="fas fa-bolt"></i></h3>
+            <p class="card-desc">Cập nhật những xu hướng và nội dung sáng tạo mới nhất từ đội ngũ Mon Fanpage.</p>
         </div>
-    </main>
+
+        <a href="https://www.facebook.com/share/g/1GjvjoHiFj/" target="_blank" class="feature-card group-card">
+            <h3>Kết nối Nhóm <i class="fas fa-comments"></i></h3>
+            <p class="card-desc">Gia nhập nhóm cộng đồng trên Facebook để thảo luận, chia sẻ và tương tác trực tiếp.</p>
+        </a>
+
+        <a href="https://www.facebook.com/profile.php?id=61584319648700" target="_blank" class="feature-card fb-card">
+            <h3>Trang Chủ <i class="fab fa-facebook"></i></h3>
+            <p class="card-desc">Theo dõi thông tin chính thức, sự kiện và các thông báo mới nhất từ Fanpage.</p>
+        </a>
+
+        <a href="https://www.tiktok.com/@mon_fanpage" target="_blank" class="feature-card tiktok-card">
+            <h3>TikTok <i class="fab fa-tiktok"></i></h3>
+            <p class="card-desc">Khám phá những khoảnh khắc giải trí thú vị và bắt trend nhanh nhất cùng Mon.</p>
+        </a>
+    </section>
 
     <footer>
-        <div>KHỞI TẠO 2026</div>
-        <div>QUẢN TRỊ: NGUYỄN VĂN TUYÊN</div>
-        <div>TRẠNG THÁI: TỐI ƯU</div>
+        &copy; 2024 Mon Fanpage Community
     </footer>
 
     <script>
-        // Xử lý chuyển cảnh sau khi chào
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const gate = document.getElementById('intro-gate');
-                gate.style.opacity = '0';
-                gate.style.pointerEvents = 'none';
-                
-                setTimeout(() => {
-                    const db = document.getElementById('dashboard');
-                    db.style.opacity = '1';
-                    db.style.transform = 'scale(1)';
-                }, 800);
-            }, 4500); // Đợi 4.5 giây cho hiệu ứng chữ chào
-        });
-
-        // Đồng hồ thời gian thực
-        function updateClock() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('vi-VN', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false 
-            });
-            document.getElementById('clock').innerText = timeStr;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // Hiệu ứng di chuyển nền theo chuột
-        document.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX / window.innerWidth - 0.5) * 15;
-            const moveY = (e.clientY / window.innerHeight - 0.5) * 15;
-            document.getElementById('canvas').style.transform = `translate(${moveX}px, ${moveY}px)`;
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(10, 10, 18, 0.95)';
+                nav.style.padding = '15px 8%';
+            } else {
+                nav.style.background = 'rgba(10, 10, 18, 0.8)';
+                nav.style.padding = '20px 8%';
+            }
         });
     </script>
+
 </body>
 </html>
