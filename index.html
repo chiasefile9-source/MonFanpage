@@ -2,346 +2,260 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mon Fanpage | Cộng Đồng Đam Mê</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Fanpage | Tin Tức Hoạt Hình Thế Giới</title>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root {
-            --primary-blue: #1000b5; 
-            --gradient: linear-gradient(90deg, #9b59f6, #4facfe, #00e0b0);
+            --primary: #00e0b0;
             --dark-bg: #0a0a12;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --facebook-color: #1877F2;
-            --tiktok-color: #ff0050;
-            --group-color: #22c55e;
-        }
-
-        /* Tối ưu hóa hiển thị và xóa thanh trượt ngang */
-        html, body { 
-            scroll-behavior: smooth; 
-            overflow-x: hidden; 
-            width: 100%;
-            margin: 0;
-            padding: 0;
+            --glass: rgba(255, 255, 255, 0.05);
+            --gradient: linear-gradient(90deg, #ff4d4d, #f9cb28); /* Màu nóng cho tin tức */
         }
 
         body {
             background-color: var(--dark-bg);
             color: #ffffff;
             font-family: 'Be Vietnam Pro', sans-serif;
+            margin: 0;
+            padding-top: 80px;
         }
 
-        /* --- THANH ĐIỀU HƯỚNG (NAVIGATION) --- */
+        /* --- NAVIGATION --- */
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 8%;
-            background: rgba(10, 10, 18, 0.95);
-            backdrop-filter: blur(20px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 8%; background: rgba(10, 10, 18, 0.95);
+            position: fixed; width: 100%; top: 0; z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             box-sizing: border-box;
-            transition: all 0.4s ease;
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            z-index: 1001;
+        /* --- TIN NÓNG MODAL --- */
+        #hotNewsModal {
+            display: none; position: fixed; z-index: 9999; left: 0; top: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
         }
 
-        .logo-img {
-            height: 48px; /* Tăng kích thước logo để tinh tế hơn */
-            width: auto;
-            object-fit: contain;
+        .modal-content {
+            background: #1a1a2e; margin: 5% auto; padding: 0;
+            width: 90%; max-width: 700px; border-radius: 20px;
+            overflow: hidden; border: 1px solid var(--primary);
+            position: relative; animation: slideUp 0.4s ease;
         }
 
-        .logo-text { 
-            font-weight: 700; 
-            font-size: 22px; 
-            letter-spacing: -1px;
-            white-space: nowrap;
+        @keyframes slideUp { from {transform: translateY(100px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+
+        .modal-header {
+            background: var(--gradient); padding: 15px;
+            font-weight: bold; color: #000; text-align: center; font-size: 1.2rem;
         }
 
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 25px;
+        .modal-body { padding: 25px; max-height: 70vh; overflow-y: auto; }
+        .modal-body img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 25px; cursor: pointer; color: #000; }
+
+        /* --- ADMIN PANEL --- */
+        #adminPanel {
+            display: none; background: var(--glass); margin: 20px 8%; padding: 30px;
+            border-radius: 20px; border: 1px solid var(--primary);
         }
 
-        .nav-links a {
-            color: #ccc;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: 0.3s;
-            white-space: nowrap;
+        /* --- NEWS FEED --- */
+        .container { padding: 40px 8%; }
+        .news-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px; margin-top: 30px;
         }
 
-        .nav-links a:hover { color: #00e0b0; }
-
-        .btn-join-nav {
-            border: 1px solid #00e0b0; 
-            padding: 8px 20px !important; 
-            border-radius: 50px;
-            color: #00e0b0 !important;
-            transition: 0.4s !important;
+        .news-card {
+            background: var(--glass); border-radius: 15px; overflow: hidden;
+            transition: 0.3s; cursor: pointer; border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .btn-join-nav:hover {
-            background: rgba(0, 224, 176, 0.1);
-            box-shadow: 0 0 15px rgba(0, 224, 176, 0.2);
-        }
+        .news-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .news-img { width: 100%; height: 200px; object-fit: cover; }
+        .news-body { padding: 20px; }
+        .badge { background: #ff4d4d; color: #fff; padding: 4px 12px; border-radius: 50px; font-size: 11px; }
 
-        .menu-icon {
-            display: none;
-            font-size: 24px;
-            color: white;
-            cursor: pointer;
-            z-index: 1001;
-        }
+        .world-news-section { background: #16213e; padding: 40px 8%; margin-top: 50px; border-radius: 40px 40px 0 0; }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 80px 5% 0;
-            background: radial-gradient(circle at 50% 30%, rgba(16, 0, 181, 0.15), transparent);
-            box-sizing: border-box;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.2rem, 8vw, 4.5rem);
-            margin-bottom: 20px;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            color: #94a3b8;
-            max-width: 700px;
-            margin-bottom: 40px;
-        }
-
-        .btn-main {
-            padding: 18px 50px;
-            border-radius: 100px;
-            background: var(--gradient);
-            color: white;
-            font-weight: 600;
-            text-decoration: none;
-            box-shadow: 0 10px 30px rgba(0, 224, 176, 0.3);
-            transition: 0.4s;
-        }
-
-        .btn-main:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 45px rgba(0, 224, 176, 0.5);
-        }
-
-        /* --- FEATURES GRID --- */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            padding: 60px 8% 100px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: var(--glass-bg);
-            padding: 40px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: 0.4s ease;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .feature-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-10px);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-card h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .content-card h3 { color: #9b59f6; }
-        .group-card h3 { color: var(--group-color); }
-        .fb-card h3 { color: var(--facebook-color); }
-        .tiktok-card h3 { color: var(--tiktok-color); }
-
-        .feature-card p { font-size: 1rem; color: #94a3b8; line-height: 1.6; margin: 0; }
-
-        /* --- MOBILE RESPONSIVE (Sửa lỗi Menu) --- */
-        @media (max-width: 992px) {
-            nav { padding: 15px 5%; }
-            .menu-icon { display: block; }
-
-            .nav-links {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 80%;
-                height: 100vh;
-                background: #0d0d16;
-                flex-direction: column;
-                justify-content: center;
-                gap: 20px;
-                transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-            }
-
-            .nav-links.active { right: 0; }
-
-            .nav-links a {
-                font-size: 20px;
-                width: 100%;
-                text-align: center;
-                padding: 15px 0;
-            }
-
-            .btn-join-nav {
-                border: none;
-                background: var(--gradient);
-                color: white !important;
-                width: 80% !important;
-                border-radius: 12px;
-            }
-        }
-
-        footer {
-            text-align: center;
-            padding: 60px 20px;
-            color: #475569;
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
+        input, textarea, select {
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            color: white; border-radius: 8px; margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
+    <!-- MODAL TIN NÓNG -->
+    <div id="hotNewsModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeHotNews()">&times;</span>
+            <div class="modal-header"><i class="fas fa-fire"></i> TIN NÓNG TRONG NGÀY</div>
+            <div id="modalData" class="modal-body">
+                <!-- Nội dung tin nóng sẽ hiện ở đây -->
+            </div>
+        </div>
+    </div>
+
     <nav>
-        <div class="logo-container" onclick="window.scrollTo(0,0)">
-            <img src="logo.png" alt="" class="logo-img">
-            <div class="logo-text">Mon <span style="color:#00e0b0">fanpage</span></div>
-        </div>
-
-        <div class="menu-icon" id="menuToggle">
-            <i class="fas fa-bars-staggered"></i>
-        </div>
-
-        <div class="nav-links" id="navMenu">
-            <a href="#home">Trang chủ</a>
-            <a href="#kham-pha">Khám phá</a>
-            <a href="https://www.facebook.com/profile.php?id=61584319648700" target="_blank">Fanpage</a>
-            <a href="https://www.tiktok.com/@mon_fanpage" target="_blank">TikTok</a>
-            <a href="https://www.facebook.com/share/g/1GjvjoHiFj/" target="_blank" class="btn-join-nav">Gia nhập nhóm</a>
+        <div style="font-weight: 700; font-size: 20px; letter-spacing: 1px;">MON <span style="color:var(--primary)">ANIMATION</span></div>
+        <div>
+            <button onclick="adminAuth()" style="background:none; border: 1px solid #444; color: #888; padding: 5px 15px; border-radius: 20px; cursor: pointer;">Admin</button>
         </div>
     </nav>
 
-    <section class="hero" id="home">
-        <h1>Hệ sinh thái cộng đồng Mon Fanpage.</h1>
-        <p>Không gian kết nối đam mê, sáng tạo nội dung và cập nhật những xu hướng mới nhất. Đồng hành cùng chúng mình trên mọi nền tảng!</p>
-        <a href="#kham-pha" class="btn-main">Khám phá ngay</a>
-    </section>
-
-    <section class="features" id="kham-pha">
-        <div class="feature-card content-card">
-            <h3>Nội dung <i class="fas fa-wand-magic-sparkles"></i></h3>
-            <p>Trải nghiệm những nội dung số sáng tạo, hình ảnh và video độc quyền được thiết kế bởi Mon Team.</p>
+    <!-- BẢNG ĐIỀU KHIỂN ADMIN -->
+    <section id="adminPanel">
+        <h2 style="color: var(--primary); margin-top:0">Đăng bài báo mới</h2>
+        <input type="text" id="title" placeholder="Tiêu đề bài viết...">
+        <input type="text" id="image" placeholder="Link ảnh bìa...">
+        <textarea id="content" rows="4" placeholder="Nội dung chi tiết bài báo..."></textarea>
+        <div style="display:flex; gap:10px; margin-bottom:15px">
+            <label><input type="checkbox" id="isHot"> Đặt làm TIN NÓNG (Hiện lên ngay khi vào trang)</label>
         </div>
-
-        <a href="https://www.facebook.com/share/g/1GjvjoHiFj/" target="_blank" class="feature-card group-card">
-            <h3>Kết nối Nhóm <i class="fas fa-comments"></i></h3>
-            <p>Cộng đồng thảo luận sôi nổi. Nơi bạn có thể chia sẻ ý kiến và làm quen với những người bạn cùng sở thích.</p>
-        </a>
-
-        <a href="https://www.facebook.com/profile.php?id=61584319648700" target="_blank" class="feature-card fb-card">
-            <h3>Fanpage chính <i class="fab fa-facebook"></i></h3>
-            <p>Kênh tin tức chính thống. Cập nhật lịch trình sự kiện, thông báo quan trọng và các buổi Livestream đặc biệt.</p>
-        </a>
-
-        <a href="https://www.tiktok.com/@mon_fanpage" target="_blank" class="feature-card tiktok-card">
-            <h3>TikTok <i class="fab fa-tiktok"></i></h3>
-            <p>Kho video ngắn giải trí, bắt trend cực nhanh và những khoảnh khắc hậu trường thú vị nhất.</p>
-        </a>
+        <button onclick="publishNews()" style="width:100%; padding:15px; background:var(--primary); border:none; border-radius:8px; font-weight:bold; cursor:pointer">XUẤT BẢN</button>
     </section>
 
-    <footer>
-        &copy; 2024 Mon Fanpage Community. Cảm ơn bạn đã đồng hành cùng chúng mình.
-    </footer>
+    <div class="container">
+        <h1><i class="fas fa-bolt" style="color:#f9cb28"></i> Tin tức Mon Fanpage</h1>
+        <div class="news-grid" id="newsFeed"></div>
+    </div>
+
+    <!-- TỔNG HỢP TIN THẾ GIỚI (GIẢ LẬP DỮ LIỆU) -->
+    <section class="world-news-section">
+        <h2 style="color:var(--primary)"><i class="fas fa-globe"></i> Hoạt hình Thế Giới</h2>
+        <div class="news-grid" id="worldNewsFeed">
+            <!-- Tin thế giới sẽ tự động render -->
+        </div>
+    </section>
 
     <script>
-        // Xử lý đóng/mở Menu trên di động (kiểu Slide-in hiện đại)
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.getElementById('navMenu');
+        const ADMIN_PASSWORD = "mon123";
+        let isAdmin = false;
 
-        menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navMenu.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars-staggered');
-            icon.classList.toggle('fa-xmark');
-        });
-
-        // Đóng menu khi nhấn ra ngoài hoặc nhấn vào link
-        document.addEventListener('click', (e) => {
-            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-                navMenu.classList.remove('active');
-                menuToggle.querySelector('i').classList.add('fa-bars-staggered');
-                menuToggle.querySelector('i').classList.remove('fa-xmark');
+        // Dữ liệu tin hoạt hình thế giới mẫu
+        const worldAnimationNews = [
+            {
+                title: "Spider-Man: Beyond the Spider-Verse cập nhật lịch chiếu mới",
+                image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=500",
+                desc: "Sony Pictures vừa công bố thêm thông tin về phần kết của bộ ba phim Người Nhện đình đám...",
+                source: "Hollywood Reporter"
+            },
+            {
+                title: "Studio Ghibli nhận giải Cành Cọ Vàng danh dự tại Cannes",
+                image: "https://images.unsplash.com/photo-1578632292335-df3abbb0d586?auto=format&fit=crop&w=500",
+                desc: "Lần đầu tiên một hãng phim hoạt hình được vinh danh tại liên hoan phim danh giá nhất thế giới.",
+                source: "Anime News Network"
+            },
+            {
+                title: "Disney thông báo dự án Frozen 3 và Toy Story 5",
+                image: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?auto=format&fit=crop&w=500",
+                desc: "Giám đốc điều hành Bob Iger khẳng định các phần tiếp theo đang được sản xuất rầm rộ.",
+                source: "Variety"
             }
-        });
+        ];
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                menuToggle.querySelector('i').classList.add('fa-bars-staggered');
-                menuToggle.querySelector('i').classList.remove('fa-xmark');
-            });
-        });
-
-        // Hiệu ứng Nav bar khi cuộn
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 30) {
-                nav.style.padding = '8px 8%';
-                nav.style.background = 'rgba(10, 10, 18, 0.98)';
-                nav.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
-            } else {
-                nav.style.padding = '12px 8%';
-                nav.style.background = 'rgba(10, 10, 18, 0.95)';
-                nav.style.boxShadow = 'none';
+        // 1. Quản lý Admin
+        function adminAuth() {
+            if(prompt("Nhập mã Admin:") === ADMIN_PASSWORD) {
+                isAdmin = true;
+                document.getElementById('adminPanel').style.display = 'block';
+                renderNews();
             }
-        });
+        }
+
+        // 2. Đăng bài và xử lý TIN NÓNG
+        function publishNews() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const image = document.getElementById('image').value || 'https://via.placeholder.com/400x250';
+            const isHot = document.getElementById('isHot').checked;
+
+            if(!title || !content) return alert("Thiếu thông tin!");
+
+            const post = { id: Date.now(), title, content, image, isHot, date: new Date().toLocaleString('vi-VN') };
+            let posts = JSON.parse(localStorage.getItem('mon_news')) || [];
+            posts.unshift(post);
+            localStorage.setItem('mon_news', JSON.stringify(posts));
+            
+            location.reload(); // Load lại để kích hoạt tin nóng nếu có
+        }
+
+        // 3. Hiển thị tin và Popup Tin Nóng
+        function renderNews() {
+            const feed = document.getElementById('newsFeed');
+            const posts = JSON.parse(localStorage.getItem('mon_news')) || [];
+            
+            // Render bài viết admin
+            feed.innerHTML = posts.map((p, i) => `
+                <div class="news-card" onclick="openDetail(${p.id})">
+                    <img src="${p.image}" class="news-img">
+                    <div class="news-body">
+                        ${p.isHot ? '<span class="badge">TIN NÓNG</span>' : '<span class="badge" style="background:#444">BẢN TIN</span>'}
+                        <h3 class="news-title">${p.title}</h3>
+                        <p class="news-desc">${p.content.substring(0, 80)}...</p>
+                        ${isAdmin ? `<button onclick="deletePost(${i})" style="color:red; background:none; border:none; cursor:pointer">Xóa bài</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            // Kiểm tra tin nóng để hiện bảng ngay khi load trang
+            const hotPost = posts.find(p => p.isHot === true);
+            if(hotPost && !sessionStorage.getItem('hotNewsShown')) {
+                showHotNews(hotPost);
+                sessionStorage.setItem('hotNewsShown', 'true'); // Chỉ hiện 1 lần mỗi phiên truy cập
+            }
+
+            // Render tin thế giới
+            const worldFeed = document.getElementById('worldNewsFeed');
+            worldFeed.innerHTML = worldAnimationNews.map(n => `
+                <div class="news-card">
+                    <img src="${n.image}" class="news-img">
+                    <div class="news-body">
+                        <span class="badge" style="background:#4facfe">QUỐC TẾ</span>
+                        <h3 class="news-title" style="font-size:1.1rem">${n.title}</h3>
+                        <p class="news-desc">${n.desc}</p>
+                        <small style="color:var(--primary)">Nguồn: ${n.source}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 4. Các hàm điều khiển Modal
+        function showHotNews(post) {
+            const modal = document.getElementById('hotNewsModal');
+            const body = document.getElementById('modalData');
+            body.innerHTML = `
+                <img src="${post.image}">
+                <h2>${post.title}</h2>
+                <p style="color:#aaa; font-size:12px">${post.date}</p>
+                <p style="line-height:1.8; color:#eee">${post.content}</p>
+            `;
+            modal.style.display = 'block';
+        }
+
+        function openDetail(id) {
+            const posts = JSON.parse(localStorage.getItem('mon_news')) || [];
+            const post = posts.find(p => p.id === id);
+            showHotNews(post);
+        }
+
+        function closeHotNews() {
+            document.getElementById('hotNewsModal').style.display = 'none';
+        }
+
+        function deletePost(index) {
+            let posts = JSON.parse(localStorage.getItem('mon_news')) || [];
+            posts.splice(index, 1);
+            localStorage.setItem('mon_news', JSON.stringify(posts));
+            renderNews();
+        }
+
+        window.onload = renderNews;
     </script>
 </body>
 </html>
