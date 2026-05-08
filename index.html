@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Fanpage | Tin Tức Hoạt Hình Thế Giới</title>
+    <title>Mon Fanpage | Tin Tức & Video Hoạt Hình</title>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -12,7 +12,7 @@
             --primary: #00e0b0;
             --dark-bg: #0a0a12;
             --glass: rgba(255, 255, 255, 0.05);
-            --gradient: linear-gradient(90deg, #ff4d4d, #f9cb28); /* Màu nóng cho tin tức */
+            --gradient: linear-gradient(90deg, #ff4d4d, #f9cb28);
         }
 
         body {
@@ -41,7 +41,7 @@
 
         .modal-content {
             background: #1a1a2e; margin: 5% auto; padding: 0;
-            width: 90%; max-width: 700px; border-radius: 20px;
+            width: 90%; max-width: 750px; border-radius: 20px;
             overflow: hidden; border: 1px solid var(--primary);
             position: relative; animation: slideUp 0.4s ease;
         }
@@ -53,9 +53,11 @@
             font-weight: bold; color: #000; text-align: center; font-size: 1.2rem;
         }
 
-        .modal-body { padding: 25px; max-height: 70vh; overflow-y: auto; }
-        .modal-body img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
-        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 25px; cursor: pointer; color: #000; }
+        .modal-body { padding: 25px; max-height: 75vh; overflow-y: auto; }
+        .modal-body img, .modal-body video, .modal-body iframe { 
+            width: 100%; border-radius: 10px; margin-bottom: 20px; border: none;
+        }
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 25px; cursor: pointer; color: #000; z-index: 10; }
 
         /* --- ADMIN PANEL --- */
         #adminPanel {
@@ -73,93 +75,77 @@
         .news-card {
             background: var(--glass); border-radius: 15px; overflow: hidden;
             transition: 0.3s; cursor: pointer; border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
         }
 
         .news-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        .news-img { width: 100%; height: 200px; object-fit: cover; }
+        .img-container { position: relative; width: 100%; height: 200px; }
+        .news-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .play-icon {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 40px; color: rgba(255,255,255,0.8); text-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
         .news-body { padding: 20px; }
-        .badge { background: #ff4d4d; color: #fff; padding: 4px 12px; border-radius: 50px; font-size: 11px; }
+        .badge { background: #ff4d4d; color: #fff; padding: 4px 12px; border-radius: 50px; font-size: 11px; margin-right: 5px; }
 
         .world-news-section { background: #16213e; padding: 40px 8%; margin-top: 50px; border-radius: 40px 40px 0 0; }
 
         input, textarea, select {
             width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            color: white; border-radius: 8px; margin-bottom: 10px;
+            color: white; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box;
         }
     </style>
 </head>
 <body>
 
-    <!-- MODAL TIN NÓNG -->
     <div id="hotNewsModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeHotNews()">&times;</span>
-            <div class="modal-header"><i class="fas fa-fire"></i> TIN NÓNG TRONG NGÀY</div>
-            <div id="modalData" class="modal-body">
-                <!-- Nội dung tin nóng sẽ hiện ở đây -->
-            </div>
+            <div class="modal-header" id="modalHeader"><i class="fas fa-fire"></i> CHI TIẾT</div>
+            <div id="modalData" class="modal-body"></div>
         </div>
     </div>
 
     <nav>
         <div style="font-weight: 700; font-size: 20px; letter-spacing: 1px;">MON <span style="color:var(--primary)">ANIMATION</span></div>
-        <div>
-            <button onclick="adminAuth()" style="background:none; border: 1px solid #444; color: #888; padding: 5px 15px; border-radius: 20px; cursor: pointer;">Admin</button>
-        </div>
+        <div><button onclick="adminAuth()" style="background:none; border: 1px solid #444; color: #888; padding: 5px 15px; border-radius: 20px; cursor: pointer;">Admin</button></div>
     </nav>
 
-    <!-- BẢNG ĐIỀU KHIỂN ADMIN -->
     <section id="adminPanel">
-        <h2 style="color: var(--primary); margin-top:0">Đăng bài báo mới</h2>
+        <h2 style="color: var(--primary); margin-top:0">Đăng bài mới</h2>
         <input type="text" id="title" placeholder="Tiêu đề bài viết...">
-        <input type="text" id="image" placeholder="Link ảnh bìa...">
-        <textarea id="content" rows="4" placeholder="Nội dung chi tiết bài báo..."></textarea>
+        <input type="text" id="image" placeholder="Link ảnh bìa (Thumbnail)...">
+        <input type="text" id="videoUrl" placeholder="Link Video (YouTube hoặc MP4) - Để trống nếu không có">
+        <textarea id="content" rows="4" placeholder="Nội dung chi tiết..."></textarea>
         <div style="display:flex; gap:10px; margin-bottom:15px">
-            <label><input type="checkbox" id="isHot"> Đặt làm TIN NÓNG (Hiện lên ngay khi vào trang)</label>
+            <label><input type="checkbox" id="isHot"> Đặt làm TIN NÓNG</label>
         </div>
         <button onclick="publishNews()" style="width:100%; padding:15px; background:var(--primary); border:none; border-radius:8px; font-weight:bold; cursor:pointer">XUẤT BẢN</button>
     </section>
 
     <div class="container">
-        <h1><i class="fas fa-bolt" style="color:#f9cb28"></i> Tin tức Mon Fanpage</h1>
+        <h1><i class="fas fa-play-circle" style="color:var(--primary)"></i> Tin tức & Video</h1>
         <div class="news-grid" id="newsFeed"></div>
     </div>
 
-    <!-- TỔNG HỢP TIN THẾ GIỚI (GIẢ LẬP DỮ LIỆU) -->
     <section class="world-news-section">
         <h2 style="color:var(--primary)"><i class="fas fa-globe"></i> Hoạt hình Thế Giới</h2>
-        <div class="news-grid" id="worldNewsFeed">
-            <!-- Tin thế giới sẽ tự động render -->
-        </div>
+        <div class="news-grid" id="worldNewsFeed"></div>
     </section>
 
     <script>
         const ADMIN_PASSWORD = "mon123";
         let isAdmin = false;
 
-        // Dữ liệu tin hoạt hình thế giới mẫu
-        const worldAnimationNews = [
-            {
-                title: "Spider-Man: Beyond the Spider-Verse cập nhật lịch chiếu mới",
-                image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=500",
-                desc: "Sony Pictures vừa công bố thêm thông tin về phần kết của bộ ba phim Người Nhện đình đám...",
-                source: "Hollywood Reporter"
-            },
-            {
-                title: "Studio Ghibli nhận giải Cành Cọ Vàng danh dự tại Cannes",
-                image: "https://images.unsplash.com/photo-1578632292335-df3abbb0d586?auto=format&fit=crop&w=500",
-                desc: "Lần đầu tiên một hãng phim hoạt hình được vinh danh tại liên hoan phim danh giá nhất thế giới.",
-                source: "Anime News Network"
-            },
-            {
-                title: "Disney thông báo dự án Frozen 3 và Toy Story 5",
-                image: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?auto=format&fit=crop&w=500",
-                desc: "Giám đốc điều hành Bob Iger khẳng định các phần tiếp theo đang được sản xuất rầm rộ.",
-                source: "Variety"
-            }
-        ];
+        // Xử lý link YouTube để nhúng iframe
+        function getYoutubeEmbed(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length == 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
+        }
 
-        // 1. Quản lý Admin
         function adminAuth() {
             if(prompt("Nhập mã Admin:") === ADMIN_PASSWORD) {
                 isAdmin = true;
@@ -168,72 +154,73 @@
             }
         }
 
-        // 2. Đăng bài và xử lý TIN NÓNG
         function publishNews() {
             const title = document.getElementById('title').value;
             const content = document.getElementById('content').value;
             const image = document.getElementById('image').value || 'https://via.placeholder.com/400x250';
+            const videoUrl = document.getElementById('videoUrl').value;
             const isHot = document.getElementById('isHot').checked;
 
             if(!title || !content) return alert("Thiếu thông tin!");
 
-            const post = { id: Date.now(), title, content, image, isHot, date: new Date().toLocaleString('vi-VN') };
+            const post = { 
+                id: Date.now(), 
+                title, content, image, videoUrl, isHot, 
+                date: new Date().toLocaleString('vi-VN') 
+            };
+            
             let posts = JSON.parse(localStorage.getItem('mon_news')) || [];
             posts.unshift(post);
             localStorage.setItem('mon_news', JSON.stringify(posts));
-            
-            location.reload(); // Load lại để kích hoạt tin nóng nếu có
+            location.reload();
         }
 
-        // 3. Hiển thị tin và Popup Tin Nóng
         function renderNews() {
             const feed = document.getElementById('newsFeed');
             const posts = JSON.parse(localStorage.getItem('mon_news')) || [];
             
-            // Render bài viết admin
             feed.innerHTML = posts.map((p, i) => `
                 <div class="news-card" onclick="openDetail(${p.id})">
-                    <img src="${p.image}" class="news-img">
+                    <div class="img-container">
+                        <img src="${p.image}" class="news-img">
+                        ${p.videoUrl ? '<div class="play-icon"><i class="fas fa-play-circle"></i></div>' : ''}
+                    </div>
                     <div class="news-body">
-                        ${p.isHot ? '<span class="badge">TIN NÓNG</span>' : '<span class="badge" style="background:#444">BẢN TIN</span>'}
+                        ${p.isHot ? '<span class="badge">TIN NÓNG</span>' : ''}
+                        ${p.videoUrl ? '<span class="badge" style="background:var(--primary); color:#000">VIDEO</span>' : '<span class="badge" style="background:#444">BẢN TIN</span>'}
                         <h3 class="news-title">${p.title}</h3>
-                        <p class="news-desc">${p.content.substring(0, 80)}...</p>
-                        ${isAdmin ? `<button onclick="deletePost(${i})" style="color:red; background:none; border:none; cursor:pointer">Xóa bài</button>` : ''}
+                        <p class="news-desc" style="font-size:0.9rem; color:#ccc">${p.content.substring(0, 70)}...</p>
+                        ${isAdmin ? `<button onclick="event.stopPropagation(); deletePost(${i})" style="color:#ff4d4d; background:none; border:none; cursor:pointer; padding:0; font-size:12px">Xóa bài</button>` : ''}
                     </div>
                 </div>
             `).join('');
 
-            // Kiểm tra tin nóng để hiện bảng ngay khi load trang
+            // Tự động hiện tin nóng
             const hotPost = posts.find(p => p.isHot === true);
             if(hotPost && !sessionStorage.getItem('hotNewsShown')) {
-                showHotNews(hotPost);
-                sessionStorage.setItem('hotNewsShown', 'true'); // Chỉ hiện 1 lần mỗi phiên truy cập
+                showModal(hotPost);
+                sessionStorage.setItem('hotNewsShown', 'true');
             }
-
-            // Render tin thế giới
-            const worldFeed = document.getElementById('worldNewsFeed');
-            worldFeed.innerHTML = worldAnimationNews.map(n => `
-                <div class="news-card">
-                    <img src="${n.image}" class="news-img">
-                    <div class="news-body">
-                        <span class="badge" style="background:#4facfe">QUỐC TẾ</span>
-                        <h3 class="news-title" style="font-size:1.1rem">${n.title}</h3>
-                        <p class="news-desc">${n.desc}</p>
-                        <small style="color:var(--primary)">Nguồn: ${n.source}</small>
-                    </div>
-                </div>
-            `).join('');
         }
 
-        // 4. Các hàm điều khiển Modal
-        function showHotNews(post) {
+        function showModal(post) {
             const modal = document.getElementById('hotNewsModal');
             const body = document.getElementById('modalData');
+            const ytLink = post.videoUrl ? getYoutubeEmbed(post.videoUrl) : null;
+
+            let mediaHtml = `<img src="${post.image}">`;
+            
+            if (ytLink) {
+                mediaHtml = `<iframe height="350" src="${ytLink}" allowfullscreen></iframe>`;
+            } else if (post.videoUrl) {
+                mediaHtml = `<video controls><source src="${post.videoUrl}" type="video/mp4">Trình duyệt không hỗ trợ video.</video>`;
+            }
+
             body.innerHTML = `
-                <img src="${post.image}">
-                <h2>${post.title}</h2>
-                <p style="color:#aaa; font-size:12px">${post.date}</p>
-                <p style="line-height:1.8; color:#eee">${post.content}</p>
+                ${mediaHtml}
+                <h2 style="margin-top:0">${post.title}</h2>
+                <p style="color:#aaa; font-size:12px"><i class="far fa-clock"></i> ${post.date}</p>
+                <div style="line-height:1.8; color:#eee; white-space: pre-wrap;">${post.content}</div>
             `;
             modal.style.display = 'block';
         }
@@ -241,18 +228,21 @@
         function openDetail(id) {
             const posts = JSON.parse(localStorage.getItem('mon_news')) || [];
             const post = posts.find(p => p.id === id);
-            showHotNews(post);
+            showModal(post);
         }
 
         function closeHotNews() {
             document.getElementById('hotNewsModal').style.display = 'none';
+            document.getElementById('modalData').innerHTML = ''; // Dừng video khi đóng
         }
 
         function deletePost(index) {
-            let posts = JSON.parse(localStorage.getItem('mon_news')) || [];
-            posts.splice(index, 1);
-            localStorage.setItem('mon_news', JSON.stringify(posts));
-            renderNews();
+            if(confirm("Xóa bài này?")) {
+                let posts = JSON.parse(localStorage.getItem('mon_news')) || [];
+                posts.splice(index, 1);
+                localStorage.setItem('mon_news', JSON.stringify(posts));
+                renderNews();
+            }
         }
 
         window.onload = renderNews;
